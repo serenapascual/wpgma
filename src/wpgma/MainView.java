@@ -69,11 +69,9 @@ public class MainView {
 		for(final JTextField l : labelsLeft) {
 			l.addKeyListener(new KeyListener() {
 
-				public void keyTyped(KeyEvent e) {
-				}
+				public void keyTyped(KeyEvent e) {}
 
-				public void keyPressed(KeyEvent e) {
-				}
+				public void keyPressed(KeyEvent e) {}
 
 				public void keyReleased(KeyEvent e) {
 					labelsTop.get(labelsLeft.indexOf(l)).setText(l.getText());
@@ -120,11 +118,9 @@ public class MainView {
 	private void listenerSetText(final int i, final int j) {
 		cells.get(j).addKeyListener(new KeyListener() {
 			
-			public void keyTyped(KeyEvent e) {
-			}
+			public void keyTyped(KeyEvent e) {}
 
-			public void keyPressed(KeyEvent e) {
-			}
+			public void keyPressed(KeyEvent e) {}
 
 			public void keyReleased(KeyEvent e) {
 				cells.get(j / model.getSize() + (j % model.getSize()) * model.getSize()).setText(cells.get(j).getText());

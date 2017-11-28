@@ -6,8 +6,7 @@ package wpgma;
  *
  */
 
-public class TreeBuilder {
-	
+public class WPGMACalculator {
 	public static void main(String[] args) {
 		DataModel model = new DataModel();
 		MainView view = new MainView(model);
