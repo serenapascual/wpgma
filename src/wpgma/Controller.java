@@ -13,7 +13,7 @@ public class Controller extends JPanel {
 		JLabel inputSizeLabel = new JLabel("Input size:");
 		final JTextField inputSizeField = new JTextField(2);
 		JButton tableButton = new JButton("New table");
-		JButton treeButton = new JButton("Generate tree");
+		JButton computeButton = new JButton("Compute averages");
 		
 		tableButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -23,16 +23,16 @@ public class Controller extends JPanel {
 			}
 		});
 		
-		treeButton.addActionListener(new ActionListener() {
+		computeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+					model.addElements();
 			}
 		});
 		
 		toolbar.add(inputSizeLabel);
 		toolbar.add(inputSizeField);
 		toolbar.add(tableButton);
-		toolbar.add(treeButton);
+		toolbar.add(computeButton);
 		
 		setLayout(new BorderLayout());
 		add(matrix);
