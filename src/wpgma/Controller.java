@@ -18,7 +18,16 @@ public class Controller extends JPanel {
 		tableButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (inputSizeField.getText().length() > 0) {
-					model.setSize(Integer.parseInt(inputSizeField.getText()));
+					try {
+						model.setSize(Integer.parseInt(inputSizeField.getText()));
+					}
+					catch (NumberFormatException e1) {
+						JFrame frame = new JFrame();
+	                	JOptionPane.showMessageDialog(frame,
+	                            "Please enter a positive integer value.",
+	                            "Invalid input",
+	                            JOptionPane.WARNING_MESSAGE);
+					}
 				}
 			}
 		});

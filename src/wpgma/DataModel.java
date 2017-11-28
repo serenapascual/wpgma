@@ -2,6 +2,7 @@ package wpgma;
 
 import java.util.*;
 
+import javax.swing.*;
 import javax.swing.event.*;
 
 /**
@@ -54,7 +55,26 @@ public class DataModel {
 	public void addElements() {
 		for (int i = 0; i < view.getCells().size(); i++) {
 			String name = view.getLabels().get(i / size).getText();
-			double distance = Integer.parseInt(view.getCells().get(i).getText());
+			double distance = 0;
+			try {
+				distance = Integer.parseInt(view.getCells().get(i).getText());
+			}
+			catch (NumberFormatException e) {
+				JFrame frame = new JFrame();
+            	JOptionPane.showMessageDialog(frame,
+                        "Please enter a positive numeric value in each cell of the distance matrix.",
+                        "Invalid input",
+                        JOptionPane.WARNING_MESSAGE);
+            	break;
+			}
+			if (distance < 0) {
+				JFrame frame = new JFrame();
+            	JOptionPane.showMessageDialog(frame,
+                        "Please enter a positive numeric value in each cell of the distance matrix.",
+                        "Invalid input",
+                        JOptionPane.WARNING_MESSAGE);
+            	break;
+			}
 			String name2 = view.getLabels().get(i % size).getText();
 			elements2.put(name2, distance);
 			elements1.put(name, elements2);
