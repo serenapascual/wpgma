@@ -36,7 +36,7 @@ public class MainView {
 		panel.setBackground(Color.WHITE);
 		frame.add(panel);
 		frame.add(controller, BorderLayout.SOUTH);
-		frame.setSize(400, 400);
+		frame.setSize(450, 450);
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -46,7 +46,7 @@ public class MainView {
 		panel.removeAll();
 		JPanel labelsTopPanel = new JPanel();
 		labelsTopPanel.setLayout(new BoxLayout(labelsTopPanel, BoxLayout.LINE_AXIS));
-		labelsTopPanel.setBorder(BorderFactory.createEmptyBorder(40, 115, 0, 40));
+		labelsTopPanel.setBorder(BorderFactory.createEmptyBorder(40, 150, 0, 40));
 		for (int i = 1; i < model.getSize() + 1; i++) {
 			JTextField label = new JTextField("" + i);
 			label.setEnabled(false);
@@ -58,7 +58,7 @@ public class MainView {
 		labelsLeftPanel.setLayout(new BoxLayout(labelsLeftPanel, BoxLayout.PAGE_AXIS));
 		labelsLeftPanel.setBorder(BorderFactory.createEmptyBorder(0, 40, 40, 0));
 		for (int i = 1; i < model.getSize() + 1; i++) {
-			JTextField label = new JTextField("" + i, 5);
+			JTextField label = new JTextField("" + i, 8);
 			label.setFocusable(true);
 			label.requestFocusInWindow();
 			labelsLeftPanel.add(label);
@@ -93,7 +93,7 @@ public class MainView {
 				else {
 					distance += model.getDistances().get("" + i).get("" + j);
 				}
-				final JTextField cell = new JTextField(distance);
+				final JTextField cell = new JTextField(distance, 5);
 				cell.setFocusable(true);
 				cell.requestFocusInWindow();
 				table.add(cell);
