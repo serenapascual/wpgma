@@ -17,6 +17,7 @@ public class DataModel {
 	
 	public DataModel() {
 		elements1 = new HashMap<String, HashMap<String, Double>>();
+		elements2 = new HashMap<String, Double>();
 		size = 0;
 	}
 	
