@@ -5,6 +5,11 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+/**
+ * Controller class to modify model as requested by GUI
+ * @author Serena Pascual and Erin Yang
+ *
+ */
 public class Controller extends JPanel {
 	public Controller(final DataModel model) {
 		JPanel matrix = new JPanel();
@@ -15,9 +20,11 @@ public class Controller extends JPanel {
 		JButton tableButton = new JButton("New table");
 		JButton computeButton = new JButton("Compute averages");
 		
+		// retrieve text from text field requesting number of matrix elements
 		tableButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (inputSizeField.getText().length() > 0) {
+					// error handling to ensure valid input
 					try {
 						model.setSize(Integer.parseInt(inputSizeField.getText()));
 					}
@@ -34,7 +41,11 @@ public class Controller extends JPanel {
 		
 		computeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+					// store matrix inputs into nested HashMap
 					model.addElements();
+					// perform algorithm
+					WPGMAChart chart = new WPGMAChart(model.getDistances());
+					chart.solveChart(); // error
 			}
 		});
 		

@@ -157,8 +157,6 @@ public class WPGMAChart {
 		//dataChart=chart;
 		//return to a previous call or terminate the function w/ updated table values
 		return;
-		
-	
 	}
 	
 	//main function, test out algorithm
