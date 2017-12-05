@@ -2,6 +2,10 @@ package wpgma;
 
 import java.util.*;
 
+/**
+ * Class performing algorithmic computations assuming given matrix 
+ * @author Serena Pascual and Erin Yang
+ */
 public class WPGMAChart {
 	private HashMap<String,HashMap<String,Double>> dataChart;
 	private ArrayList<String> pairDist = new ArrayList<String>();
@@ -11,31 +15,45 @@ public class WPGMAChart {
 		dataChart = input;
 	}
 	
-	//Getter Functions
-	//returns the actual datachart stored in this instance of wpgmaChart
+	/**
+	 * Returns the data chart stored in this instance of WPGMAChart
+	 * @return the data chart stored in this instance of WPGMAChart
+	 */
 	public HashMap<String,HashMap<String,Double>> getChart(){
 		return dataChart;
 	}
-	//returns arraylist of distances between pairs
+	
+	/**
+	 * Returns ArrayList of distances between pairs
+	 * @return ArrayList of distances between pairs
+	 */
 	public ArrayList<String> getPairDist(){
 		return pairDist;
 	}
 	
-	//returns size if needed
+	/**
+	 * Returns size of data chart
+	 * @return size of data chart
+	 */
 	public int getSize(){
 		return dataChart.size();
 	}
 	
-	
-	//other functions
-	public String toString(){//converts to string while ordering the pairs from closest  cluster to largest
+	/**
+	 * Converts to string while ordering the pairs from closest cluster to largest
+	 * @return pair name as a String
+	 */
+	public String toString(){
 		String output = "";
 		for(String s: pairDist){
 			output += s+"\n";
 		}
 		return output; //for now
 	}
-	//removes 0 from the chart or any same same pairing
+	
+	/**
+	 * Removes 0 from the chart, or any pairing of an element against itself
+	 */
 	public void removeZero(){
 		
 		for(HashMap<String, Double> e: dataChart.values()){
@@ -52,12 +70,20 @@ public class WPGMAChart {
 			//}
 		}
 	}
-	//calculates avg of the new pair with the rest
+	
+	/**
+	 * Calculates the average of the new pair with the rest
+	 * @param x the first element
+	 * @param y the second element
+	 * @return the average of the new cluster with the rest
+	 */
 	public double calculate(double x, double y){
 		return (x+y)/2;
 	}
 	
-	//calls recursive function solve
+	/**
+	 * Function to recursively call solve() method
+	 */
 	public void solveChart(){
 		if(dataChart.size()<1){
 			System.out.println("Not enough information\n");
@@ -74,11 +100,14 @@ public class WPGMAChart {
 		return;
 	}
 	
-	//solve function where it takes:
-	//1. length estimation (find smallest distance value in chart and divide by two) then add to the pairDist ArrayList
-	//2. calculate distances created by the new pairing value with the other values
-	//3. update chart by deleting the old values used for the new pair
-	//4. call the solve function again w/ the updated chart
+	/**
+	 * Solve function where it takes:
+	 * 1. length estimation (find smallest distance value in chart and divide by two) then add to the pairDist ArrayList
+	 * 2. calculate distances created by the new pairing value with the other values
+	 * 3. update chart by deleting the old values used for the new pair
+	 * 4. call the solve function again w/ the updated chart
+	 * @param input the matrix of distances
+	 */
 	public void solve(HashMap<String,HashMap<String,Double>> input){
 		//initialize values
 		HashMap<String,HashMap<String,Double>> chart = input;
@@ -159,7 +188,10 @@ public class WPGMAChart {
 		return;
 	}
 	
-	//main function, test out algorithm
+	/**
+	 * Main function for testing
+	 * @param args expected arguments
+	 */
 	public static void main(String[] args){
 		//create a new nested hashMap
 		HashMap<String,Double> in = new HashMap<String,Double>();
@@ -197,13 +229,10 @@ public class WPGMAChart {
 		
 		out.put("Pongo", in);
 		
-		
 		WPGMAChart test = new WPGMAChart(out); //works
 		System.out.println("starting chart size = " +test.getSize());
 		
 		test.solveChart(); //error
-		System.out.println(test.toString());
-		
+		System.out.println(test.toString());	
 	}
-	
 }

@@ -6,8 +6,8 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 /**
+ * Model for distance matrix
  * @author Serena Pascual and Erin Yang
- * Model for the distance matrix
  */
 
 public class DataModel {

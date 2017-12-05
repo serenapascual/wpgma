@@ -9,8 +9,8 @@ import javax.swing.event.*;
 import java.util.*;
 
 /**
- * @author Serena Pascual and Erin Yang
  * Class holding main visual components of the program
+ * @author Serena Pascual and Erin Yang
  */
 
 public class MainView {

@@ -8,7 +8,6 @@ import javax.swing.*;
 /**
  * Controller class to modify model as requested by GUI
  * @author Serena Pascual and Erin Yang
- *
  */
 public class Controller extends JPanel {
 	public Controller(final DataModel model) {

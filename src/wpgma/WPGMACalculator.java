@@ -1,9 +1,8 @@
 package wpgma;
 
 /**
- * 
+ * Main method
  * @author Serena Pascual and Erin Yang
- *
  */
 
 public class WPGMACalculator {
