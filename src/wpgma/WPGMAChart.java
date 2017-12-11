@@ -45,7 +45,7 @@ public class WPGMAChart {
 	 */
 	public String toString(){
 		String output = "";
-		for(String s: pairDist){
+		for (String s: pairDist) {
 			output += s+"\n";
 		}
 		return output; //for now
@@ -53,22 +53,29 @@ public class WPGMAChart {
 	
 	/**
 	 * Removes 0 from the chart, or any pairing of an element against itself
+	 * @return HashMap without pairings with distance 0
 	 */
-	public void removeZero(){
-		
-		for(HashMap<String, Double> e: dataChart.values()){
-			Iterator<Map.Entry<String,Double>> iter = e.entrySet().iterator();
-			while(iter.hasNext()){
-				Map.Entry<String,Double> entry = iter.next();
-				if(entry.getKey().equals(e)) {
-					
-					iter.remove();
+	@SuppressWarnings("unchecked")
+	public HashMap<String, HashMap<String,Double>> removeZero(){
+		//alg working
+		//storing values that are not 0 in a new nested hashmap
+		HashMap<String,HashMap<String,Double>> store = dataChart;
+		String tmp = null;
+		//HashMap<String,Double> tmpH = new HashMap<String,Double>();
+		for(Map.Entry<String, HashMap<String, Double>> x: store.entrySet()){
+			HashMap<String,Double> value = x.getValue();
+			for(Map.Entry<String,Double> entry: value.entrySet()){
+				if(entry.getKey().equals(x.getKey())){
+					 tmp = entry.getKey();
 				}
 			}
-			//for(HashMap.Entry<String,Double> h: e.entrySet()){
-				//if(h.getValue()==0.0||h.getValue().equals(0)) e.remove(h.getKey()); //remove the key-value pair that has the 0
-			//}
+			HashMap<String,Double> tmpH = new HashMap<String,Double>(value);
+			tmpH.remove(tmp);
+			System.out.println("Removed: "+tmp+" value: "+tmpH);
+			store.put(x.getKey(), tmpH);
 		}
+		System.out.println("final: "+store +"\n hashcode of store in removeZero: "+store.hashCode());
+		return store;
 	}
 	
 	/**
@@ -89,8 +96,10 @@ public class WPGMAChart {
 			System.out.println("Not enough information\n");
 		}
 		else if(dataChart.size()==1){
-			//adds that one value (a species and the dist val 0) to the pairDist arraylist
-			pairDist.add(dataChart.values().toString());
+			HashMap<String,HashMap<String,Double>> store = removeZero();
+			System.out.println(store);
+			System.out.println("\nhashcode of store in solveChart(): "+store.hashCode());
+			solve(store);
 		}
 		else{
 			removeZero();
@@ -109,8 +118,9 @@ public class WPGMAChart {
 	 * @param input the matrix of distances
 	 */
 	public void solve(HashMap<String,HashMap<String,Double>> input){
+		System.out.println(input.toString()+" the input\n");
 		//initialize values
-		HashMap<String,HashMap<String,Double>> chart = input;
+		HashMap<String,HashMap<String,Double>> chart = new HashMap<String,HashMap<String,Double>>(input);
 		String sA = null; //Species A
 		String sB = null; //Species B (from nested hashmap of species A)
 		String AB; //Pairing of A and B species
@@ -122,9 +132,9 @@ public class WPGMAChart {
 			for(String e: chart.keySet()){
 				HashMap<String,Double> nested = chart.get(e);
 				for(Map.Entry<String,Double> m: nested.entrySet())
-				if(!m.getValue().equals(0.0))//if the value does not equal to 0.0, add it to the arraylist of strings
+				if(m.getValue()!=0.0)//if the value does not equal to 0.0, add it to the arraylist of strings
 				{
-					pairDist.add(e+", "+m.getKey().toString()+m.getValue().toString());
+					pairDist.add("("+e+" "+m.getKey().toString()+") - "+(m.getValue()/2));
 					return;
 				}
 			}
@@ -142,46 +152,91 @@ public class WPGMAChart {
 					min = nested.getValue();
 					sA = key1;
 					sB = nested.getKey();
-					System.out.println(sA+" "+sB+" dist: "+min);
+					System.out.println("if min =0 "+sA+"  "+sB+" dist: "+min);
 				}
 				else if(nested.getValue()<min){//get min distance in the whole table
 					min = nested.getValue(); //store the min distance 
 					sA = key1; //store the name of species A
 					sB = nested.getKey();
-					//distanceTable.put(speciesA, new HashMap<String,Double>().put(speciesB,avgDist));
+					System.out.println("if nested value<min "+sA+"  "+sB+" dist: "+min);
 				}
 			}
 		}
 		//new pairing name
-		AB = sA+", "+sB;
+		AB = "("+sA+" "+sB+")";
+		System.out.println("new pairing: "+AB);
 		//length estimation
 		double estimate = min/2;
 		//store string w/ pairname and distance into the arraylist
-		System.out.println("pairDist:" + pairDist.size());
+		//System.out.println("pairDist:" + pairDist.size());
+		
 		pairDist.add(AB+" - "+estimate);
 		
+		System.out.println("pairDist:" + pairDist.size() + pairDist.toString()+"\n"); // show distance of newest pairing
 		//stores a value to be added to the new chart
 		HashMap<String,Double> value1 = new HashMap<String,Double>();
+		System.out.println("starting to update:" + chart.toString()+"\n");
 		
-		for(String s: chart.keySet()){ //update the input chart
-			if(!(sA.equalsIgnoreCase(s)&&sB.equalsIgnoreCase(s))){//if key does not equal the 
-				Double a = chart.get(s).get(sA);
-				System.out.println(s+" "+sA+" "+a);
-				Double b = chart.get(s).get(sB);
-				System.out.println(s+" "+sB+" "+b);
-				Double d = calculate(a,b); //calculate the distance
-				value1.put(s, d); //put distance into the value to be put into the chart
-			}
+		for(Map.Entry<String,HashMap<String,Double>> h: chart.entrySet()){ //update the input chart
+			String key = h.getKey(); //gets outer key
+			HashMap<String,Double> value = h.getValue();
+			System.out.println(key+"_"+value.toString());
+			if(key.equalsIgnoreCase(sA)||key.equalsIgnoreCase(sB)){}
+			else{
+				for(Map.Entry<String,Double> s: value.entrySet()){
+					//System.out.println("\nkey of outer hashmap: "+key);
+					//System.out.println("key of inner hashmap: "+s.getKey().toString());
+					System.out.println("\n s: "+s.toString()); //this value needs to be sent to calculate()
+				
+					String x = s.getKey(); //gets inner key
+					System.out.println("sA: "+sA+" sB: "+sB+" x: "+x+"\n");
+					Double a = 0.0;
+					Double b = 0.0;
+					//Double calcNum = s.getValue();
+					
+					if((sA.equalsIgnoreCase(x))||(sB.equalsIgnoreCase(x))){
+					//if x equals the sA or sB
+					
+						a = chart.get(key).get(sA);
+						System.out.println(key+" sA: "+sA+" "+a);
+						b = chart.get(key).get(sB);
+						System.out.println(key+" sB: "+sB+" "+b);
+						Double d = calculate(a,b); //calculate the distance
+						System.out.println("New Value(s): " +d);
+						
+												
+						value1.put(key, d); //put distance into the value to be put into the chart
+						System.out.println("put into value1\n");
+						//remove the inner key-values used for creating new chart values
+						//keysToRemove.add(key);
+						//System.out.println("key to be removed added");
+						//chart.get(key).remove(sA);
+						//chart.get(key).remove(sB);
+					}
+					
+				}
 			
+			}
 		}
+		
 		//update chart
 		chart.put(AB, value1);
-		
+		System.out.println("\nnew values inserted into chart: "+AB+value1.toString()+"\n");
+
 		//remove the keys used for the new pairing
+		for(Map.Entry<String,Double> obj:value1.entrySet()){
+			chart.get(obj.getKey()).remove(sA);
+			chart.get(obj.getKey()).remove(sB);
+			
+			chart.get(obj.getKey()).put(AB, obj.getValue());
+			//System.out.println("updated: "+chart.toString()+" ");
+			
+		}
 		chart.remove(sA);
 		chart.remove(sB);
 		
 		//call the function again w/ the new chart
+		System.out.println("\n\ncalling solve()\n");
 		solve(chart);
 		//dataChart=chart;
 		//return to a previous call or terminate the function w/ updated table values
@@ -202,37 +257,55 @@ public class WPGMAChart {
 		in.put("Pan", 0.089);
 		in.put("Gorilla", 0.104);
 		in.put("Pongo", 0.161);
+		in.put("Hylobates", 0.182);
 		
-		out.put("Homo Sapiens", in);
+		out.put("Homo Sapiens", new HashMap<String,Double>(in));
+		
 		
 		//values for pan
 		in.put("Homo Sapiens", 0.089);
 		in.put("Pan", 0.0);
 		in.put("Gorilla", 0.106);
 		in.put("Pongo", 0.171);
+		in.put("Hylobates", 0.166);
 		
-		out.put("Pan", in);
+		out.put("Pan", new HashMap<String,Double>(in));
 		
 		//values for gorilla
 		in.put("Homo Sapiens", 0.104);
 		in.put("Pan", 0.106);
 		in.put("Gorilla", 0.0);
 		in.put("Pongo", 0.166);
+		in.put("Hylobates", 0.189);
 		
-		out.put("Gorilla", in);
+		out.put("Gorilla", new HashMap<String,Double>(in));
+		
+		//values for hylobates
+		in.put("Homo Sapiens", 0.182);
+		in.put("Pan", 0.189);
+		in.put("Gorilla", 0.189);
+		in.put("Pongo", 0.188);
+		in.put("Hylobates", 0.0);
+		
+		out.put("Hylobates", new HashMap<String,Double>(in));
 		
 		//values for pongo
 		in.put("Homo Sapiens", 0.161);
 		in.put("Pan", 0.171);
 		in.put("Gorilla", 0.166);
 		in.put("Pongo", 0.0);
+		in.put("Hylobates", 0.188);
 		
 		out.put("Pongo", in);
+		System.out.println(out);
 		
 		WPGMAChart test = new WPGMAChart(out); //works
 		System.out.println("starting chart size = " +test.getSize());
 		
-		test.solveChart(); //error
-		System.out.println(test.toString());	
+		test.solveChart(); //works for size 4
+		System.out.println("testing complete:\n" + test.toString());
+		
+		//HashMap<String,HashMap<String,Double>> out2 = out;
+		//HashMap<String,Double> in2 = new HashMap<String,Double>();
 	}
 }
