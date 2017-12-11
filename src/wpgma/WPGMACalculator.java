@@ -1,7 +1,7 @@
 package wpgma;
 
 /**
- * Main method
+ * Primary main method
  * @author Serena Pascual and Erin Yang
  */
 

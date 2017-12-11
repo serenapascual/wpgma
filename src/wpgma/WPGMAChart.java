@@ -240,6 +240,11 @@ public class WPGMAChart {
 		solve(chart);
 		//dataChart=chart;
 		//return to a previous call or terminate the function w/ updated table values
+		System.out.println("\n\nResults:");
+		for (String s : pairDist) {
+			System.out.println(s);
+		}
+		System.out.println("Exiting...");
 		return;
 	}
 	
